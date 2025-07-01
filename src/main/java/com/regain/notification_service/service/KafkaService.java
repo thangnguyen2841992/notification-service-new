@@ -1,5 +1,6 @@
 package com.regain.notification_service.service;
 
+import com.regain.notification_service.model.MessageActiveResponse;
 import com.regain.notification_service.model.MessageSendActiveUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,5 +20,11 @@ public class KafkaService {
     public void receiveEmailActive(MessageSendActiveUser messageSendActiveUser) {
         logger.info("Received email: {}", messageSendActiveUser.getToEmail());
         this.notificationService.sendEmailActive(messageSendActiveUser);
+    }
+
+    @KafkaListener(id = "sendEmailActiveResponseGroup", topics = "send-email-active-response")
+    public void receiveEmailActiveResponse(MessageActiveResponse messageActiveResponse) {
+        logger.info("Received email: {}", messageActiveResponse.getToUserEmail());
+        this.notificationService.sendEmailActiveResponse(messageActiveResponse);
     }
 }
