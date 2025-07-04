@@ -1,6 +1,7 @@
 package com.regain.notification_service.service;
 
 import com.regain.notification_service.model.MessageActiveResponse;
+import com.regain.notification_service.model.MessageBirthDay;
 import com.regain.notification_service.model.MessageSendActiveUser;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -35,6 +36,18 @@ public class NotificationServiceImpl implements INotificationService{
         String subject = "Xin chào " +  messageActiveResponse.getToUserFullName();
         String text = "Bạn đã kích hoạt thành công tài khoản ở Order Restaurant. Bạn có thể sử dụng dịch vụ của chúng tôi." + "<br>" + "Cám ơn bạn!";
         sendMailActiveAccount(messageActiveResponse.getToUserEmail(), subject, text);
+    }
+
+    @Override
+    public void sendEmailHappyBirthDay(MessageBirthDay messageBirthDay) {
+        String subject = "Xin chào " +  messageBirthDay.getFullName();
+        String text = "";
+        if (messageBirthDay.isStaff()) {
+             text = "Chúc mừng sinh nhật bạn. Chúc bạn tuổi mới thành công, và cùng xây dựng công ty nhé.";
+        } else {
+             text = "Chúc mừng sinh nhật quý khách. Chúc quý khách tuổi mới thành công, vui vẻ hạnh phúc.";
+        }
+        sendMailActiveAccount(messageBirthDay.getEmail(), subject, text);
     }
 
     private void sendMailActiveAccount(String toEmail, String subject, String text) {
