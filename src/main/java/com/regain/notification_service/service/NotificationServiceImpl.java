@@ -78,7 +78,6 @@ public class NotificationServiceImpl implements INotificationService{
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
-
         this.javaMailSender.send(message);
     }
 }
