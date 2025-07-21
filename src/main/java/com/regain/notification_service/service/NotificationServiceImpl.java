@@ -2,6 +2,7 @@ package com.regain.notification_service.service;
 
 import com.regain.notification_service.model.MessageActiveResponse;
 import com.regain.notification_service.model.MessageBirthDay;
+import com.regain.notification_service.model.MessageOrder;
 import com.regain.notification_service.model.MessageSendActiveUser;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -11,6 +12,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 @Service
 public class NotificationServiceImpl implements INotificationService{
@@ -48,6 +52,19 @@ public class NotificationServiceImpl implements INotificationService{
              text = "Chúc mừng sinh nhật quý khách. Chúc quý khách tuổi mới thành công, vui vẻ hạnh phúc.";
         }
         sendMailActiveAccount(messageBirthDay.getEmail(), subject, text);
+    }
+
+    @Override
+    public void sendEmailOrder(MessageOrder messageOrder) {
+        // Định dạng số với dấu phẩy
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedAmount = formatter.format(messageOrder.getTotalPrice());
+
+        // Thêm đơn vị tiền tệ
+        String result = formattedAmount + " VND";
+        String subject = "Xin chào " +  messageOrder.getFullName();
+        String text = "Bạn vừa đặt " + messageOrder.getTotalProduct() + " sản phẩm có giá tiền: " + formattedAmount + " đ" + "<br/>" + "Mã đơn hàng: #" + messageOrder.getOrderId() ;
+        sendMailActiveAccount(messageOrder.getToEmail(), subject, text);
     }
 
     private void sendMailActiveAccount(String toEmail, String subject, String text) {

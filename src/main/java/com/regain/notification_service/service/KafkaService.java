@@ -2,6 +2,7 @@ package com.regain.notification_service.service;
 
 import com.regain.notification_service.model.MessageActiveResponse;
 import com.regain.notification_service.model.MessageBirthDay;
+import com.regain.notification_service.model.MessageOrder;
 import com.regain.notification_service.model.MessageSendActiveUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,5 +34,11 @@ public class KafkaService {
     public void receiveEmailBirthDay(MessageBirthDay messageBirthDay) {
         logger.info("Received email: {}", messageBirthDay.getEmail());
         this.notificationService.sendEmailHappyBirthDay(messageBirthDay);
+    }
+
+    @KafkaListener(id = "sendEmailOrderGroup", topics = "send-email-order")
+    public void receiveEmailOrder(MessageOrder messageOrder) {
+        logger.info("Received email: {}", messageOrder.getToEmail());
+        this.notificationService.sendEmailOrder(messageOrder);
     }
 }
