@@ -1,9 +1,6 @@
 package com.regain.notification_service.service;
 
-import com.regain.notification_service.model.MessageActiveResponse;
-import com.regain.notification_service.model.MessageBirthDay;
-import com.regain.notification_service.model.MessageOrder;
-import com.regain.notification_service.model.MessageSendActiveUser;
+import com.regain.notification_service.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +37,11 @@ public class KafkaService {
     public void receiveEmailOrder(MessageOrder messageOrder) {
         logger.info("Received email: {}", messageOrder.getToEmail());
         this.notificationService.sendEmailOrder(messageOrder);
+    }
+
+    @KafkaListener(id = "sendEmailOrderMessageGroup", topics = "send-email-order-message")
+    public void receiveEmailOrderProcess(MessageOrderResponse messageOrder) {
+        logger.info("Received email: {}", messageOrder.getToEmail());
+        this.notificationService.sendEmailProcessOrder(messageOrder);
     }
 }

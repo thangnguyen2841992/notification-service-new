@@ -1,9 +1,6 @@
 package com.regain.notification_service.service;
 
-import com.regain.notification_service.model.MessageActiveResponse;
-import com.regain.notification_service.model.MessageBirthDay;
-import com.regain.notification_service.model.MessageOrder;
-import com.regain.notification_service.model.MessageSendActiveUser;
+import com.regain.notification_service.model.*;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +61,13 @@ public class NotificationServiceImpl implements INotificationService{
         String result = formattedAmount + " VND";
         String subject = "Xin chào " +  messageOrder.getFullName();
         String text = "Bạn vừa đặt " + messageOrder.getTotalProduct() + " sản phẩm có giá tiền: " + formattedAmount + " đ" + "<br/>" + "Mã đơn hàng: #" + messageOrder.getOrderId() ;
+        sendMailActiveAccount(messageOrder.getToEmail(), subject, text);
+    }
+
+    @Override
+    public void sendEmailProcessOrder(MessageOrderResponse messageOrder) {
+        String subject = "Xin chào " +  messageOrder.getFullName();
+        String text = messageOrder.getMessage();
         sendMailActiveAccount(messageOrder.getToEmail(), subject, text);
     }
 
